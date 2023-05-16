@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <title>Registro de Usuarios y Pedidos</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <img src="/static/images/logo.jpeg" alt="Logo" style="height: 60px;" />
+      <div class="header__item">Usuarios</div>
+      <div class="header__item">Recetas</div>
+      <div class="header__item">Cotizaciones</div>
+      <div class="header__item">Entregas</div>
+    </header>
+    <div class="body">
+      <section class="body__item">
+        <h1>Registro de Usuarios</h1>
+          <form id="createUserForm">
+            <label for="usuariomail">Email:</label>
+            <input type="email" id="usuariomail" name="usuariomail" required>
+            
+            <label for="usuarionombre">Nombre:</label>
+            <input type="text" id="usuarionombre" name="usuarionombre" required>
+        
+            <!-- Incluye los demás campos correspondientes a la clase Usuario -->
+        
+            <input type="submit" value="Registrar Usuario">
+        </form>
+    
+      </section>
+      <section class="body__item">
+        <h1>Registro de Recetas</h1>
+          <form id="createRecipeForm">
+            <label for="medicamento">Medicamento:</label>
+            <input type="text" id="medicamento" name="medicamento" required>
+      
+            <label for="tipo_de_toma">Tipo de toma:</label>
+            <input type="text" id="tipo_de_toma" name="tipo_de_toma" required>
+      
+          <!-- Incluye los demás campos correspondientes a la clase Receta -->
+      
+            <input type="submit" value="Registrar Receta">
+        </form>
+      
+      </section>
+      <section class="body__item">
+        <h1>Registro de Cotizaciones</h1>
+          <form id="createQuotationForm">
+            <label for="insumo">Insumo:</label>
+            <input type="text" id="insumo" name="insumo" required>
+      
+            <label for="porcentaje">Porcentaje:</label>
+            <input type="number" id="porcentaje" name="porcentaje" step="0.01" required>
+      
+          <!-- Incluye los demás campos correspondientes a la clase Cotizacion -->
+      
+            <input type="submit" value="Registrar Cotización">
+        </form>
+      
+      </section>
+      <section class="body__item">
+        <h1>Registro de Entregas</h1>
+          <form id="createDeliveryForm">
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" required>
+      
+            <label for="vehiculo">Vehículo:</label>
+            <input type="text" id="vehiculo" name="vehiculo" required>
+
+            <input type="text" id="placa" name="placa" required>
+
+            <label for="metodo_pago">Método de Pago:</label>
+            <input type="text" id="metodo_pago" name="metodo_pago" required>
+
+            <label for="hora_entrega">Hora de Entrega:</label>
+            <input type="time" id="hora_entrega" name="hora_entrega" required>
+
+            <label for="image_pedido">Imagen del Pedido:</label>
+            <input type="file" id="image_pedido" name="image_pedido">
+
+            <input type="submit" value="Registrar Delivery">
+    
+            <input type="submit" value="Registrar Delivery">
+        </form>
+      
+      </section>
+    </div>
+  </body>
+  <script src="/static/js/main.js"></script>
+</html>
+
