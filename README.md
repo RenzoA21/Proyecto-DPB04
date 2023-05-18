@@ -17,7 +17,8 @@ Es una aplicacion web de una farmacia que busca administrar los negocios del loc
 
 #### Misión
 
--
+-Generar dinero a traves de esta aplicacion de farmacia, por el medio del delivery, preparacion de recetas, consultas y compras a traves de esta
+
 
 #### Visión
 
