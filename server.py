@@ -14,13 +14,11 @@ import sys
 from sqlalchemy import Enum
 
 
-# Configuration
+# Configuration de la pagina
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@localhost:5432/christian'
 db = SQLAlchemy(app)
 ALLOW_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-
-
 db = SQLAlchemy()
 
 
