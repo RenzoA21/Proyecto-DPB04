@@ -6,6 +6,7 @@ document.querySelector("#form").addEventListener("submit", function(event) {
   var metodo_pago = document.querySelector("#metodo_pago").value;
   var hora_entrega = document.querySelector("#hora_entrega").value;
   var image_pedido = document.querySelector("#image_pedido").files[0];
+
   if (direccion == "") {
     alert("Debes ingresar una dirección");
     return;
@@ -31,21 +32,22 @@ document.querySelector("#form").addEventListener("submit", function(event) {
     return;
   }
 
+  var formData = new FormData();
+  formData.append('direccion', direccion);
+  formData.append('vehiculo', vehiculo);
+  formData.append('placa', placa);
+  formData.append('metodo_pago', metodo_pago);
+  formData.append('hora_entrega', hora_entrega);
+  formData.append('image_pedido', image_pedido);
+
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "/delivery");
   xhr.onload = function() {
-    if (xhr.status == 200) {
-      alert("El formulario se ha enviado correctamente,200");
+    if (xhr.status >= 200 && xhr.status < 300) {
+      alert("El delivery se entrego correctamente,200.");
     } else {
-      alert("Hubo un error al enviar el formulario,300");
+      alert("Hubo un error con el delivery,300.");
     }
   };
-  xhr.send(JSON.stringify({
-    direccion: direccion,
-    vehiculo: vehiculo,
-    placa: placa,
-    metodo_pago: metodo_pago,
-    hora_entrega: hora_entrega,
-    image_pedido: image_pedido
-  }));
+  xhr.send(formData);
 });
