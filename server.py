@@ -13,12 +13,11 @@ from datetime import datetime
 import sys
 
 from sqlalchemy import Enum
-from datetime import datetime
-from sqlalchemy import Time
+
 
 # Configuration
 app = Flask(name)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost:5432/employeesdb40'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost:5432/farmacia'
 db = SQLAlchemy(app)
 ALLOW_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
