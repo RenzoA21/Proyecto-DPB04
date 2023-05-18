@@ -94,3 +94,36 @@ def create_delivery():
     db.session.commit()
 
     return jsonify({'success': True, 'id': delivery.id, 'message': 'Delivery created successfully'}), 201
+
+@app.route('/recetas', methods=['GET'])
+def mostrarxº_recetas():
+    recetas = Receta.query.all()
+    serialized_recetas = [receta.serialize() for receta in recetas]
+    return jsonify(serialized_recetas)
+
+@app.route('/recetas', methods=['GET'])
+def obtener_receta(receta_id):
+    receta = Receta.query.get(receta_id)
+    if receta:
+        serialized_receta = receta.serialize()
+        return jsonify(serialized_receta)
+    else:
+        return jsonify({'mensaje': 'Receta no encontrada'})
+    
+@app.route('/recetas', methods=['POST'])   
+def crear_receta():
+    
+    medicamento = request.form.get('medicamento')
+    tipo_de_toma = request.form.get('tipo_de_toma')
+    cantidad = request.form.get('cantidad')
+    unidad_medida = request.form.get('unidad_medida')
+    porcentaje = request.form.get('porcentaje')
+    ml_g = request.form.get('ml_g')
+
+    nueva_receta = Receta(medicamento, tipo_de_toma, cantidad, unidad_medida, porcentaje, ml_g)
+
+    db.session.add(nueva_receta)
+    db.session.commit()
+
+    return jsonify({'mensaje': 'Receta creada exitosamente'}), 201
+
