@@ -158,3 +158,19 @@ def validar_cajero(cajero_id):
         return jsonify({'mensaje': 'Cajero validado exitosamente'})
     else:
         return jsonify({'mensaje': 'Cajero no encontrado'})
+    
+@app.route('/cotizacion', methods=['POST'])    
+def crear_cotizacion():
+
+    data = request.json
+    insumo = request.form.get('insumo')
+    porcentaje = request.form.get('porcentaje')
+    cantidad = request.form.get('cantidad')
+    control = request.form.get('control')   
+    precio = request.form.get('precio')
+    total = request.form.get('total')
+
+    nueva_cotizacion = Cotizacion(insumo, porcentaje, cantidad, control, precio, total)
+
+    db.session.add(nueva_cotizacion)
+    db.session.commit()
