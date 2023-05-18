@@ -114,3 +114,83 @@ def create_delivery():
     db.session.commit()
 
     return jsonify({'success': True, 'id': delivery.id, 'message': 'Delivery created successfully'}), 201
+
+@app.route('/recetas', methods=['GET'])
+def mostrarxº_recetas():
+    recetas = Receta.query.all()
+    serialized_recetas = [receta.serialize() for receta in recetas]
+    return jsonify(serialized_recetas)
+
+@app.route('/recetas', methods=['GET'])
+def obtener_receta(receta_id):
+    receta = Receta.query.get(receta_id)
+    if receta:
+        serialized_receta = receta.serialize()
+        return jsonify(serialized_receta)
+    else:
+        return jsonify({'mensaje': 'Receta no encontrada'})
+    
+@app.route('/recetas', methods=['POST'])   
+def crear_receta():
+    
+    medicamento = request.form.get('medicamento')
+    tipo_de_toma = request.form.get('tipo_de_toma')
+    cantidad = request.form.get('cantidad')
+    unidad_medida = request.form.get('unidad_medida')
+    porcentaje = request.form.get('porcentaje')
+    ml_g = request.form.get('ml_g')
+
+    nueva_receta = Receta(medicamento, tipo_de_toma, cantidad, unidad_medida, porcentaje, ml_g)
+
+    db.session.add(nueva_receta)
+    db.session.commit()
+
+    return jsonify({'mensaje': 'Receta creada exitosamente'})
+
+@app.route('/cajero', methods=['POST'])   
+def crear_cajero():
+    
+    registro_inscripcion = request.form.get('registro_inscripcion')
+    verificacion = request.form.get('verificacion')
+    necesidad = request.form.get('necesidad')
+    validacion = request.form.get('validacion')
+    costo = request.form.get('costo')
+    entrega = request.form.get('entrega')
+
+    
+    nuevo_cajero = Cajero(registro_inscripcion, verificacion, necesidad, validacion, costo, entrega)
+
+    
+    db.session.add(nuevo_cajero)
+    db.session.commit()
+
+    return jsonify({'mensaje': 'Cajero creado exitosamente'})
+
+@app.route('/cajero', methods=['POST'])   
+def validar_cajero(cajero_id):
+    cajero = Cajero.query.get(cajero_id)
+    if cajero:
+        
+        cajero.validacion = True 
+
+        db.session.commit()
+
+        return jsonify({'mensaje': 'Cajero validado exitosamente'})
+    else:
+        return jsonify({'mensaje': 'Cajero no encontrado'})
+    
+@app.route('/cotizacion', methods=['POST'])    
+def crear_cotizacion():
+
+    data = request.json
+    insumo = request.form.get('insumo')
+    porcentaje = request.form.get('porcentaje')
+    cantidad = request.form.get('cantidad')
+    control = request.form.get('control')   
+    precio = request.form.get('precio')
+    total = request.form.get('total')
+
+    nueva_cotizacion = Cotizacion(insumo, porcentaje, cantidad, control, precio, total)
+
+    db.session.add(nueva_cotizacion)
+    db.session.commit()
