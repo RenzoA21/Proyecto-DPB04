@@ -31,9 +31,5 @@ Es una aplicacion web de una farmacia que busca administrar los negocios del loc
 -Flask-Migrate
 
 
-### API, requests and responses
-
-
-
 
 
