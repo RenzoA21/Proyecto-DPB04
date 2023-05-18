@@ -54,3 +54,43 @@ def login_user():
         return mensaje
 
 
+@app.route('/create-delivery', methods=['POST'])
+def create_delivery():
+    direccion = request.form.get('direccion')
+    vehiculo = request.form.get('vehiculo')
+    placa = request.form.get('placa')
+    metodo_pago = request.form.get('metodo_pago')
+    hora_entrega = request.form.get('hora_entrega')
+
+    if 'image_pedido' not in request.files:
+        return jsonify({'success': False, 'message': 'No image provided'}), 400
+    
+    file = request.files['image_pedido']
+
+    if file.filename == '':
+        return jsonify({'success': False, 'message': 'No image provided'}), 400
+    
+    if not allowed_file(file.filename):
+        return jsonify({'success': False, 'message': 'File extension not allowed'}), 400
+    
+    delivery = Delivery(direccion, vehiculo, placa, metodo_pago, hora_entrega)
+    db.session.add(delivery)
+    db.session.commit()
+    
+    cwd = os.getcwd()
+
+    delivery_dir = os.path.join(app.config['UPLOAD_FOLDER'], str(delivery.id))
+    os.makedirs(delivery_dir, exist_ok=True)
+
+    upload_folder = os.path.join(cwd, delivery_dir)
+
+    absolute_path = os.path.join(upload_folder, file.filename)
+    file.save(absolute_path)
+    file.close()
+
+    relative_path = os.path.join(delivery_dir, file.filename)
+
+    delivery.image_path = relative_path
+    db.session.commit()
+
+    return jsonify({'success': True, 'id': delivery.id, 'message': 'Delivery created successfully'}), 201
