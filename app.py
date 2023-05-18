@@ -4,7 +4,7 @@ import os
 
 os.environ['PGPASSWORD'] = '12345'
 
-from flask import (Flask, request, render_template)
+from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
