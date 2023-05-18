@@ -186,3 +186,10 @@ class Delivery(db.Model):
             'hora_entrega': str(self.hora_entrega),  
             'image_pedido': self.image_pedido
         }
+# Start server
+if __name__ == '__main__':
+    with app.app_context():
+        #db.create_all()
+        app.run(debug=True, port=5006)
+else:
+    print('Importing {}'.format(__name__))
