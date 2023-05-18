@@ -22,5 +22,21 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOW_EXTENSIONS
 
+@app.route('/create-user', methods=['POST'])
+def create_user():
+    nombre = request.form.get('nombre')
+    apellido = request.form.get('apellido')
+    fecha_nacimiento = request.form.get('fecha_nacimiento')
+    rol = request.form.get('rol')
+    email = request.form.get('email')
+    contrasena = request.form.get('contrasena')
+    sexo = request.form.get('sexo')
+    telefono = request.form.get('telefono')
 
+
+    usuario = Usuario(nombre, apellido, fecha_nacimiento, rol, email, contrasena, sexo, telefono)
+    
+    db.session.commit()
+
+    return jsonify({'success': True, 'id': usuario.id, 'message': 'Employee created successfully'}), 201
 
