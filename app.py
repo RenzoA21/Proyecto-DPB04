@@ -54,6 +54,26 @@ def login_user():
         return mensaje
 
 
+@app.route('/create-receta', methods=['POST'])
+def create_receta():
+    medicamento = request.form.get('medicamento')
+    tipo_de_toma = request.form.get('tipo_de_toma')
+    cantidad = int(request.form.get('cantidad'))
+    unidad_medida = request.form.get('unidad_medida')
+    porcentaje = float(request.form.get('porcentaje'))
+    ml_g = float(request.form.get('ml_g'))
+
+    if not medicamento or not tipo_de_toma or not cantidad or not unidad_medida or not porcentaje or not ml_g:
+        return jsonify({'success': False, 'message': 'Todos los campos son requeridos'}), 400
+    total = cantidad * porcentaje
+
+    receta = Receta(medicamento=medicamento, tipo_de_toma=tipo_de_toma, cantidad=cantidad, unidad_medida=unidad_medida, porcentaje=porcentaje, ml_g=ml_g, total=total)
+    db.session.add(receta)
+    db.session.commit()
+
+    return jsonify({'success': True, 'message': 'Receta creada exitosamente'}), 201
+
+
 @app.route('/create-delivery', methods=['POST'])
 def create_delivery():
     direccion = request.form.get('direccion')
