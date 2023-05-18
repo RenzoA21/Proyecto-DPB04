@@ -16,12 +16,11 @@ from sqlalchemy import Enum
 
 
 # Configuration
-app = Flask(name)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost:5432/farmacia'
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@localhost:5432/christian'
 db = SQLAlchemy(app)
 ALLOW_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-Base = declarative_base()
 
 db = SQLAlchemy()
 
@@ -164,7 +163,7 @@ class Delivery(db.Model):
     vehiculo = db.Column(db.String(100), nullable=False)
     placa = db.Column(db.String(20), nullable=False)
     metodo_pago = db.Column(db.String(50), nullable=False)
-    hora_entrega = db.Column(Time, nullable=False)
+    hora_entrega = db.Column(db.DateTime(timezone=True), nullable=True, onupdate=datetime.utcnow, server_default=db.text('now()'))
     image_pedido = db.Column(db.String(500), nullable=True)
 
     def __init__(self, direccion, vehiculo, placa, metodo_pago, hora_entrega, image_pedido=None):
