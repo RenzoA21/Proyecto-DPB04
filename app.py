@@ -40,3 +40,17 @@ def create_user():
 
     return jsonify({'success': True, 'id': usuario.id, 'message': 'Employee created successfully'}), 201
 
+@app.route('/login-user', methods=['POST'])
+def login_user():
+        usuario = request.form['usuario']
+        contrasena = request.form['contrasena']
+        
+        usuario_valido = Usuario.query.filter_by(nombre_usuario=usuario, contrasena=contrasena).first()
+
+        if usuario_valido:
+            mensaje = f'Inicio de sesión exitoso. Bienvenido, {usuario}!'
+        else:
+            mensaje = 'Inicio de sesión fallido. Usuario o contraseña incorrectos.'
+        return mensaje
+
+
