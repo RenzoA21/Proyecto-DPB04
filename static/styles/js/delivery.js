@@ -1,25 +1,51 @@
-// Espera a que el documento esté completamente cargado
-document.addEventListener('DOMContentLoaded', function() {
+document.querySelector("#form").addEventListener("submit", function(event) {
+  event.preventDefault();
+  var direccion = document.querySelector("#direccion").value;
+  var vehiculo = document.querySelector("#vehiculo").value;
+  var placa = document.querySelector("#placa").value;
+  var metodo_pago = document.querySelector("#metodo_pago").value;
+  var hora_entrega = document.querySelector("#hora_entrega").value;
+  var image_pedido = document.querySelector("#image_pedido").files[0];
+  if (direccion == "") {
+    alert("Debes ingresar una dirección");
+    return;
+  }
 
-    // Obtiene el formulario por su ID
-    var form = document.getElementById('myForm');
-  
-    // Añade un evento de escucha para el envío del formulario
-    form.addEventListener('submit', function(event) {
-  
-      // Obtiene los valores de los campos del formulario
-      var name = document.getElementById('name').value;
-      var email = document.getElementById('email').value;
-  
-      // Valida los campos del formulario
-      if(name === "" || email === "") {
-        alert("Por favor, rellena todos los campos del formulario.");
-        event.preventDefault(); // Previene el envío del formulario
-      } else {
-        // Aquí puedes añadir el código para manejar el envío del formulario
-        // Por ejemplo, podrías enviar los datos a un servidor con AJAX
-        console.log("Formulario enviado con éxito.");
-      }
-    });
-  });
-  
+  if (vehiculo == "") {
+    alert("Debes ingresar un vehículo");
+    return;
+  }
+
+  if (placa == "") {
+    alert("Debes ingresar una placa");
+    return;
+  }
+
+  if (metodo_pago == "") {
+    alert("Debes ingresar un método de pago");
+    return;
+  }
+
+  if (hora_entrega == "") {
+    alert("Debes ingresar una hora de entrega");
+    return;
+  }
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/delivery");
+  xhr.onload = function() {
+    if (xhr.status == 200) {
+      alert("El formulario se ha enviado correctamente,200");
+    } else {
+      alert("Hubo un error al enviar el formulario,300");
+    }
+  };
+  xhr.send(JSON.stringify({
+    direccion: direccion,
+    vehiculo: vehiculo,
+    placa: placa,
+    metodo_pago: metodo_pago,
+    hora_entrega: hora_entrega,
+    image_pedido: image_pedido
+  }));
+});
