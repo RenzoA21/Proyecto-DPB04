@@ -2,9 +2,9 @@
 from flask import (
     Flask, 
     request, 
-    render_template,
     jsonify
 )
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
 from flask_migrate import Migrate
@@ -182,6 +182,15 @@ class Delivery(db.Model):
         }
 # Endpoints
 @app.route('/', methods=['GET'])
+def index_usuario():
+    usuarios =Usuario.query.all()
+    return render_template('usuario.html', usuarios=usuarios)
+@app.route('/usuario')
+def formulario_usuario():
+    return render_template('usuario.html')
+
+
+@app.route('/', methods=['GET'])
 def index():
     usuarios=Usuario.query.all()
 
@@ -193,14 +202,7 @@ def hi(name):
 
 
 # Start the app
-@app.route('/', methods=['GET'])
-def index_usuario():
-    usuarios =Usuario.query.all()
-    return render_template('usuario.html', usuarios=usuarios)
-@app.route('/usuario', methods=['GET'])
-def mostrar_formulario_usuario():
-    return render_template('usuario.html')
-    
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
