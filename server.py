@@ -1,27 +1,27 @@
-#Imports
+# Imports
 from flask import (
     Flask, 
-    render_template, 
-    request,
+    request, 
+    render_template,
     jsonify
 )
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Enum
 from flask_migrate import Migrate
+from datetime import datetime
 import uuid
 import os
 from datetime import datetime
-import sys
-from sqlalchemy import Enum
+from dateutil import tz
 
-
-# Configuration de la pagina
+# Configuración
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@localhost:5432/christian'
 db = SQLAlchemy(app)
 ALLOW_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-db = SQLAlchemy()
 
 
+# Modelos 
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
 
@@ -61,7 +61,6 @@ class Usuario(db.Model):
             'telefono': self.telefono,
             'email': self.email
         }
-
 class Receta(db.Model):
     __tablename__ = 'receta'
 
@@ -181,10 +180,22 @@ class Delivery(db.Model):
             'hora_entrega': str(self.hora_entrega),  
             'image_pedido': self.image_pedido
         }
-# Start server
+# Endpoints
+@app.route('/', methods=['GET'])
+def index():
+    usuarios=Usuario.query.all()
+
+    return 'Hello World: {}'.format(', '.join([x.name for x in usuarios]))
+
+@app.route('/hi/<name>', methods=['GET'])
+def hi(name):
+    return 'Hi {}'.format(name)
+
+
+# Start the app
 if __name__ == '__main__':
     with app.app_context():
-        #db.create_all()
-        app.run(debug=True, port=5006)
+        db.create_all()
+    app.run(debug=True, port=5001)
 else:
     print('Importing {}'.format(__name__))
