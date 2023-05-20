@@ -200,6 +200,7 @@ def index_usuario():
 @app.route('/usuario', methods=['GET'])
 def mostrar_formulario_usuario():
     return render_template('usuario.html')
+    
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
