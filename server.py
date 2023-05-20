@@ -193,6 +193,13 @@ def hi(name):
 
 
 # Start the app
+@app.route('/', methods=['GET'])
+def index_usuario():
+    usuarios =Usuario.query.all()
+    return render_template('usuario.html', usuarios=usuarios)
+@app.route('/usuario', methods=['GET'])
+def mostrar_formulario_usuario():
+    return render_template('usuario.html')
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
