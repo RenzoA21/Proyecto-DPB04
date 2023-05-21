@@ -2,7 +2,9 @@
 from flask import (
     Flask, 
     request, 
-    jsonify
+    jsonify,
+    render_template, 
+    redirect
 )
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
@@ -35,10 +37,9 @@ class Usuario(db.Model):
     sexo = db.Column(Enum('Masculino', 'Femenino', name='sexo_types'), nullable=False) 
     telefono = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, nombre, apellido, edad, rol, usuario, contrasena, sexo, fecha_nacimiento, telefono, email):
+    def __init__(self, nombre, apellido, rol, usuario, contrasena, sexo, fecha_nacimiento, telefono, email):
         self.nombre = nombre
         self.apellido = apellido
-        self.edad = edad
         self.rol = rol
         self.usuario = usuario
         self.contrasena = contrasena
@@ -52,7 +53,6 @@ class Usuario(db.Model):
             'id': self.id,
             'nombre': self.nombre,
             'apellido': self.apellido,
-            'edad': self.edad,
             'rol': self.rol,
             'usuario': self.usuario,
             'contrasena': self.contrasena,
@@ -180,10 +180,32 @@ class Delivery(db.Model):
             'hora_entrega': str(self.hora_entrega),  
             'image_pedido': self.image_pedido
         }
+
 # Endpoints
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def formulario_usuario():
-    usuarios =Usuario.query.all()
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        rol = request.form['rol']
+        usuario = request.form['usuario']
+        contrasena = request.form['contrasena']
+        sexo = request.form['sexo']
+        fecha_nacimiento = request.form['fecha_nacimiento']
+        telefono = request.form['telefono']
+        email = request.form['email']
+
+
+        nuevo_usuario = Usuario(nombre=nombre, apellido=apellido, rol=rol,
+                                usuario=usuario, contrasena=contrasena, sexo=sexo,
+                                fecha_nacimiento=fecha_nacimiento, telefono=telefono, email=email)
+        db.session.add(nuevo_usuario)
+        db.session.commit()
+
+        # Redirigir al usuario a otra página o mostrar un mensaje de éxito
+        return redirect('/registro_exitoso')
+
+    usuarios = Usuario.query.all()
     return render_template('usuario.html', usuarios=usuarios)
 
 
