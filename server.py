@@ -182,12 +182,10 @@ class Delivery(db.Model):
         }
 # Endpoints
 @app.route('/', methods=['GET'])
-def index_usuario():
+def formulario_usuario():
     usuarios =Usuario.query.all()
     return render_template('usuario.html', usuarios=usuarios)
-@app.route('/usuario')
-def formulario_usuario():
-    return render_template('usuario.html')
+
 
 
 @app.route('/', methods=['GET'])
