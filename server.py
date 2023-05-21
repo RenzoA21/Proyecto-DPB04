@@ -1,12 +1,12 @@
 # Imports
 from flask import (
     Flask, 
-    request, 
     jsonify,
     render_template, 
     redirect
 )
 from flask import Flask, render_template
+from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Enum
 from flask_migrate import Migrate
@@ -182,11 +182,11 @@ class Delivery(db.Model):
 # Endpoints
 @app.route('/', methods=['GET', 'POST'])
 def formulario_usuario():
+
     if request.method == 'POST':
         nombre= request.form['nombre']
         apellido= request.form['apellido']
         rol= request.form['rol']
-
         contrasena= request.form['contrasena']
         sexo= request.form['sexo']
         fecha_nacimiento= request.form['fecha_nacimiento']
