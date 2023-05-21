@@ -1,86 +1,61 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
+// Obtener referencia al formulario
+const formularioUsuario = document.querySelector('form');
 
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
+// Agregar el evento de envío al formulario
+formularioUsuario.addEventListener('submit', handlingSubmit);
 
-      const nombre = document.getElementById('nombre').value;
-      const apellido = document.getElementById('apellido').value;
-      const fechaNacimiento = document.getElementById('fecha_nacimiento').value;
-      const rol = document.getElementById('rol').value;
-      const email = document.getElementById('email').value;
-      const contrasena = document.getElementById('contrasena').value;
-      const sexo = document.getElementById('sexo').value;
-      const telefono = document.getElementById('telefono').value;
+function handlingSubmit(e) {
+  e.preventDefault();
 
-      if (nombre.trim() === '') {
-        alert('Por favor, ingresa tu nombre.');
-        return;
+  // Obtener los valores del formulario
+  const nombreInput = document.querySelector('#nombre');
+  const apellidoInput = document.querySelector('#apellido');
+  const rolInput = document.querySelector('#rol');
+  const contrasenaInput = document.querySelector('#contrasena');
+  const sexoInput = document.querySelector('#sexo');
+  const fechaNacimientoInput = document.querySelector('#fecha_nacimiento');
+  const telefonoInput = document.querySelector('#telefono');
+  const emailInput = document.querySelector('#email');
+
+  const nombre = nombreInput.value;
+  const apellido = apellidoInput.value;
+  const rol = rolInput.value;
+  const contrasena = contrasenaInput.value;
+  const sexo = sexoInput.value;
+  const fechaNacimiento = fechaNacimientoInput.value;
+  const telefono = telefonoInput.value;
+  const email = emailInput.value;
+
+  // Crear el objeto de datos a enviar
+  const datosUsuario = {
+    nombre: nombre,
+    apellido: apellido,
+    rol: rol,
+    contrasena: contrasena,
+    sexo: sexo,
+    fecha_nacimiento: fechaNacimiento,
+    telefono: telefono,
+    email: email
+  };
+
+  // Realizar la solicitud POST al endpoint
+  fetch('/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(datosUsuario)
+  })
+    .then(function(response) {
+      if (response.ok) {
+        // Redirigir al usuario a otra página o mostrar un mensaje de éxito
+        window.location.href = '/registro_exitoso';
+      } else {
+        // Mostrar un mensaje de error
+        console.error('Error en la solicitud:', response.status);
       }
-
-      if (apellido.trim() === '') {
-        alert('Por favor, ingresa tu apellido.');
-        return;
-      }
-
-      if (fechaNacimiento.trim() === '') {
-        alert('Por favor, ingresa tu fecha de nacimiento.');
-        return;
-      }
-
-      if (rol.trim() === '') {
-        alert('Por favor, ingresa tu rol.');
-        return;
-      }
-
-      if (!validateEmail(email)) {
-        alert('Por favor, ingresa un correo electrónico válido.');
-        return;
-      }
-
-      if (contrasena.trim() === '') {
-        alert('Por favor, ingresa tu contraseña.');
-        return;
-      }
-
-      if (!validatePhone(telefono)) {
-        alert('Por favor, ingresa un número de teléfono válido.');
-        return;
-      }
-
-      const usuario = {
-        nombre: nombre,
-        apellido: apellido,
-        fechaNacimiento: fechaNacimiento,
-        rol: rol,
-        email: email,
-        contrasena: contrasena,
-        sexo: sexo,
-        telefono: telefono
-      };
-
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/usuario");
-      xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          alert("El usuario se registró exitosamente,200.");
-        } else {
-          alert("Hubo un error en el registro de usuario,300.");
-        }
-      };
-      xhr.send(JSON.stringify(usuario));
-
-      form.reset();
+    })
+    .catch(function(error) {
+      console.error('Error:', error);
     });
-
-    function validateEmail(email) {
-      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email).toLowerCase());
-    }
-
-    function validatePhone(phone) {
-      var re = /^\d{9}$/;
-      return re.test(String(phone));
-    }
-});
+}

@@ -27,34 +27,32 @@ ALLOW_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
 
-    id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(50), nullable=False)
-    apellido = db.Column(db.String(50), nullable=False)
-    fecha_nacimiento = db.Column(db.Date, nullable=False)
-    rol = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    contrasena = db.Column(db.String(80), nullable=False)
-    sexo = db.Column(Enum('Masculino', 'Femenino', name='sexo_types'), nullable=False) 
-    telefono = db.Column(db.String(20), nullable=False)
+    id= db.Column(db.Integer, primary_key=True)
+    nombre= db.Column(db.String(50), nullable=False)
+    apellido= db.Column(db.String(50), nullable=False)
+    fecha_nacimiento= db.Column(db.Date, nullable=False)
+    rol= db.Column(db.String(50), nullable=False)
+    email= db.Column(db.String(120), unique=True, nullable=False)
+    contrasena= db.Column(db.String(80), nullable=False)
+    sexo= db.Column(Enum('Masculino', 'Femenino', name='sexo_types'), nullable=False) 
+    telefono= db.Column(db.String(20), nullable=False)
 
-    def __init__(self, nombre, apellido, rol, usuario, contrasena, sexo, fecha_nacimiento, telefono, email):
-        self.nombre = nombre
-        self.apellido = apellido
-        self.rol = rol
-        self.usuario = usuario
-        self.contrasena = contrasena
-        self.sexo = sexo
-        self.fecha_nacimiento = fecha_nacimiento
-        self.telefono = telefono
-        self.email = email
+    def __init__(self,nombre, apellido, rol, contrasena, sexo, fecha_nacimiento, telefono, email):
+        self.nombre=nombre
+        self.apellido =apellido
+        self.rol =rol
+        self.contrasena =contrasena
+        self.sexo =sexo
+        self.fecha_nacimiento =fecha_nacimiento
+        self.telefono =telefono
+        self.email =email
 
     def serialize(self):
         return {
             'id': self.id,
-            'nombre': self.nombre,
+            'nombre':self.nombre,
             'apellido': self.apellido,
             'rol': self.rol,
-            'usuario': self.usuario,
             'contrasena': self.contrasena,
             'sexo': self.sexo,
             'fecha_nacimiento': self.fecha_nacimiento.isoformat(),
@@ -185,40 +183,36 @@ class Delivery(db.Model):
 @app.route('/', methods=['GET', 'POST'])
 def formulario_usuario():
     if request.method == 'POST':
-        nombre = request.form['nombre']
-        apellido = request.form['apellido']
-        rol = request.form['rol']
-        usuario = request.form['usuario']
-        contrasena = request.form['contrasena']
-        sexo = request.form['sexo']
-        fecha_nacimiento = request.form['fecha_nacimiento']
-        telefono = request.form['telefono']
-        email = request.form['email']
+        nombre= request.form['nombre']
+        apellido= request.form['apellido']
+        rol= request.form['rol']
+
+        contrasena= request.form['contrasena']
+        sexo= request.form['sexo']
+        fecha_nacimiento= request.form['fecha_nacimiento']
+        telefono= request.form['telefono']
+        email= request.form['email']
 
 
-        nuevo_usuario = Usuario(nombre=nombre, apellido=apellido, rol=rol,
-                                usuario=usuario, contrasena=contrasena, sexo=sexo,
+        nuevo_usuario = Usuario(nombre=nombre, apellido=apellido, rol=rol, contrasena=contrasena, sexo=sexo,
                                 fecha_nacimiento=fecha_nacimiento, telefono=telefono, email=email)
         db.session.add(nuevo_usuario)
         db.session.commit()
 
         # Redirigir al usuario a otra página o mostrar un mensaje de éxito
-        return redirect('/registro_exitoso')
+        return redirect('/hola')
 
     usuarios = Usuario.query.all()
     return render_template('usuario.html', usuarios=usuarios)
 
 
 
-@app.route('/', methods=['GET'])
+@app.route('/hola', methods=['GET'])
 def index():
     usuarios=Usuario.query.all()
 
-    return 'Hello World: {}'.format(', '.join([x.name for x in usuarios]))
+    return 'Hello World: {}'.format(', '.join([x.nombre for x in usuarios]))
 
-@app.route('/hi/<name>', methods=['GET'])
-def hi(name):
-    return 'Hi {}'.format(name)
 
 
 # Start the app
