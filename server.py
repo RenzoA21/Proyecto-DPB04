@@ -228,28 +228,6 @@ def registro():
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('registro.html')
-
-@app.route('/receta', methods=['GET', 'POST'])
-@login_required
-def crear_receta():
-    if request.method == 'POST':
-        medicamento = request.form['medicamento']
-        tipo_de_toma = request.form['tipo_de_toma']
-        cantidad = int(request.form['cantidad'])
-        unidad_medida = request.form['unidad_medida']
-        porcentaje = float(request.form['porcentaje'])
-        ml_g = float(request.form['ml_g'])
-
-        nueva_receta = Receta(medicamento=medicamento, tipo_de_toma=tipo_de_toma, cantidad=cantidad,
-                              unidad_medida=unidad_medida, porcentaje=porcentaje, ml_g=ml_g)
-        db.session.add(nueva_receta)
-        db.session.commit()
-
-        # Redirigir al usuario nuevamente a la misma página
-        return redirect('/receta')
-
-    return render_template('receta.html')
-
 @app.route('/delivery', methods=['GET', 'POST'])
 @login_required
 def delivery():
@@ -270,6 +248,27 @@ def delivery():
 
     # Retorna la plantilla con los deliveries existentes
     return render_template('delivery.html', deliveries=deliveries)
+
+
+@app.route('/receta', methods=['GET', 'POST'])
+@login_required
+def crear_receta():
+    if request.method == 'POST':
+        medicamento = request.form['medicamento']
+        tipo_de_toma = request.form['tipo_de_toma']
+        cantidad = int(request.form['cantidad'])
+        unidad_medida = request.form['unidad_medida']
+        porcentaje = float(request.form['porcentaje'])
+        ml_g = float(request.form['ml_g'])
+
+        print()
+
+        nueva_receta = Receta(medicamento=medicamento, tipo_de_toma=tipo_de_toma, cantidad=cantidad,
+                              unidad_medida=unidad_medida, porcentaje=porcentaje, ml_g=ml_g)
+        db.session.add(nueva_receta)
+        db.session.commit()
+        return redirect(url_for('delivery'))
+    return render_template('receta.html')
 
 
 
