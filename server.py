@@ -197,7 +197,7 @@ def formulario_usuario():
         db.session.add(nuevo_usuario)
         db.session.commit()
 
-        # Redirigir al usuario nuevamente a la misma página
+        # Redirigir al usuario 
         return redirect('/recetas')
 
     usuarios = Usuario.query.all()
