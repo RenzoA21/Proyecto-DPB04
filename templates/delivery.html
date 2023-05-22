@@ -1,12 +1,35 @@
 <html>
 <head>
-    <title>Formulario de Delivery</title>
-    <link rel="stylesheet" href="/static/css/delivery.css" />
+    <title>Formulario de Cajero</title>
+    <link rel="stylesheet" href="/static/css/usuario.css" />
 </head>
 <body>
+    <body id="home">
+        <Header class ="header__main">
+        <div class="logo">
+        <a href="inicio.html">
+        <h1><img src="Imagenes/Logo 1 copy.png" width="65" height="65" /></h1>
+        </a>
+        </div>
+        <label for="nav__btn" class="nav__btn-label">
+          <span class="nav__bar"></span>
+        </label>
+        <input type="checkbox" id="nav__btn" class="nav__btn">
+        <mav class="nav">
+         <nav id="main-navigation" class="navigation">
+          <ul class="nav__items">
+            <li class="nav__links"><a href="inicio.html" class="nav__link">Inicio</a></li>
+            <li class="nav__links"><a href="usuario.html" class="nav__link">Usuario</a></li>
+            <li class="nav__links"><a href="receta.html" class="nav__link">Receta</a></li>
+            <li class="nav__links"><a href="cajero.html" class="nav__link">Cajero</a></li>
+            <li class="nav__links"><a href="cotizacion.html" class="nav__link">Cotizacion</a></li>
+            <li class="nav__links"><a href="delivery.html" class="nav__link">Delivery</a></li>
+          </ul>
+       </Header>
+
     <div class="form-container">
         <h1>Formulario de Delivery</h1>
-        <form>
+        <form action="/" method="POST">
             <div class="form-field">
                 <label for="direccion">Dirección:</label>
                 <input type="text" id="direccion" name="direccion">
@@ -37,5 +60,7 @@
         </form>
     </div>
 </body>
-<script src="/static/js/delivery.js"></script>
+<footer>
+    <p>Farmacia © 2023</p>
+  </footer>
 </html>
