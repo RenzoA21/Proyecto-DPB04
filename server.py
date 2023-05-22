@@ -30,7 +30,6 @@ login_manager = LoginManager(app)
 
 ALLOW_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-# Modelos 
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
 
@@ -67,8 +66,27 @@ class Usuario(db.Model):
             'email': self.email
         }
 
-    def check_password(self, password):
-        return check_password_hash(self.contrasena, password)
+    @property
+    def is_active(self):
+        # Los usuarios de la base de datos están siempre activos.
+        return True
+
+    @property
+    def is_authenticated(self):
+        # Suponemos que todos los usuarios que se han creado están autenticados.
+        return True
+
+    @property
+    def is_anonymous(self):
+        # Todos los usuarios de nuestra base de datos no son anónimos.
+        return False
+
+    def get_id(self):
+        # Flask-Login necesita este método para devolver una identificación única para el usuario
+        # (como una cadena), que puede usar para cargar el objeto Usuario en futuras solicitudes.
+        # Generalmente, puedes simplemente devolver la id del usuario.
+        return str(self.id)
+
 
 class Receta(db.Model):
     __tablename__ = 'receta'
@@ -130,36 +148,6 @@ class Cajero(db.Model):
             'entrega': self.entrega
         }
 
-class Cotizacion(db.Model):
-    __tablename__ = 'cotizacion'
-
-    id = db.Column(db.Integer, primary_key=True)
-    insumo = db.Column(db.String(100), nullable=False)
-    porcentaje = db.Column(db.Float, nullable=False)
-    cantidad = db.Column(db.Integer, nullable=False)
-    control = db.Column(db.Boolean, default=True, nullable=False)  # Control (Si, No)
-    precio = db.Column(db.Float, nullable=False)
-    total = db.Column(db.Float, nullable=False)
-
-    def __init__(self, insumo, porcentaje, cantidad, control, precio, total):
-        self.insumo = insumo
-        self.porcentaje = porcentaje
-        self.cantidad = cantidad
-        self.control = control
-        self.precio = precio
-        self.total = total
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'insumo': self.insumo,
-            'porcentaje': self.porcentaje,
-            'cantidad': self.cantidad,
-            'control': self.control,
-            'precio': self.precio,
-            'total': self.total
-}
-
 class Delivery(db.Model):
     __tablename__ = 'delivery'
 
@@ -191,12 +179,57 @@ class Delivery(db.Model):
         }
 
 # Endpoints
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.query.get(int(user_id))
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        correo = request.form['email']
+        password = request.form['password']
+        print(correo, password)
+        user = Usuario.query.filter_by(email=correo, contrasena=password).first()
+        if user:
+            login_user(user)  # Iniciar la sesión del usuario
+            return redirect(url_for('crear_receta'))
+        else:
+            flash('Correo o contraseña incorrectos')
+    return render_template('login.html')
 
-@app.route('/recetas', methods=['GET', 'POST'])
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    # Si el usuario ya está autenticado, redirigirlo a la página principal
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        rol = request.form['rol']
+        contrasena = request.form['contrasena']
+        sexo = request.form['sexo']
+        fecha_nacimiento = request.form['fecha_nacimiento']
+        telefono = request.form['telefono']
+        email = request.form['email']
+
+        nuevo_usuario = Usuario(nombre=nombre, apellido=apellido, rol=rol, contrasena=contrasena, sexo=sexo,
+                                fecha_nacimiento=fecha_nacimiento, telefono=telefono, email=email)
+        db.session.add(nuevo_usuario)
+        db.session.commit()
+        return redirect(url_for('login'))
+    return render_template('registro.html')
+
+@app.route('/receta', methods=['GET', 'POST'])
 @login_required
 def crear_receta():
     if request.method == 'POST':
@@ -213,47 +246,36 @@ def crear_receta():
         db.session.commit()
 
         # Redirigir al usuario nuevamente a la misma página
-        return redirect('/recetas')
+        return redirect('/receta')
 
     return render_template('receta.html')
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        user = Usuario.query.filter_by(email=email).first()
-        if user is None or not user.check_password(password):
-            flash('Credenciales inválidas. Por favor, intenta nuevamente.')
-            return redirect(url_for('login'))
-
-        login_user(user)
-        next_page = request.args.get('next')
-
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
-
-        return redirect('/recetas')
-
-    return render_template('login.html')
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-@app.route('/hola', methods=['GET'])
+@app.route('/delivery', methods=['GET', 'POST'])
 @login_required
-def index():
-    usuarios=Usuario.query.all()
+def delivery():
+    if request.method == 'POST':
+        direccion = request.form['direccion']
+        vehiculo = request.form['vehiculo']
+        placa = request.form['placa']
+        metodo_pago = request.form['metodo_pago']
+        hora_entrega = request.form['hora_entrega']
 
-    return 'Hello World: {}'.format(', '.join([x.nombre for x in usuarios]))
+        nuevo_delivery = Delivery(direccion=direccion, vehiculo=vehiculo, placa=placa, metodo_pago=metodo_pago,
+                                  hora_entrega=hora_entrega)
+        db.session.add(nuevo_delivery)
+        db.session.commit()
+
+    # Obtén todos los deliveries existentes
+    deliveries = Delivery.query.all()
+
+    # Retorna la plantilla con los deliveries existentes
+    return render_template('delivery.html', deliveries=deliveries)
+
+
 
 
 # Start the app
-@login_manager.user_loader
-def load_user(user_id):
-    return Usuario.query.get(int(user_id))
+
 
 if __name__ == '__main__':
     with app.app_context():
