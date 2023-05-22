@@ -3,7 +3,9 @@ from flask import (
     Flask, 
     jsonify,
     render_template, 
-    redirect
+    redirect,
+    url_for,
+    flash
 )
 from flask import Flask, render_template
 from flask import request
@@ -15,13 +17,18 @@ import uuid
 import os
 from datetime import datetime
 from dateutil import tz
+from flask_login import LoginManager, login_required, login_user, logout_user
+from werkzeug.security import check_password_hash
+from werkzeug.urls import url_parse
 
 # Configuración
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@localhost:5432/christian'
+app.config['SECRET_KEY'] = 'secret-key'
 db = SQLAlchemy(app)
-ALLOW_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+login_manager = LoginManager(app)
 
+ALLOW_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 # Modelos 
 class Usuario(db.Model):
@@ -37,20 +44,20 @@ class Usuario(db.Model):
     sexo= db.Column(Enum('Masculino', 'Femenino', name='sexo_types'), nullable=False) 
     telefono= db.Column(db.String(20), nullable=False)
 
-    def __init__(self,nombre, apellido, rol, contrasena, sexo, fecha_nacimiento, telefono, email):
-        self.nombre=nombre
-        self.apellido =apellido
-        self.rol =rol
-        self.contrasena =contrasena
-        self.sexo =sexo
-        self.fecha_nacimiento =fecha_nacimiento
-        self.telefono =telefono
-        self.email =email
+    def __init__(self, nombre, apellido, rol, contrasena, sexo, fecha_nacimiento, telefono, email):
+        self.nombre = nombre
+        self.apellido = apellido
+        self.rol = rol
+        self.contrasena = contrasena
+        self.sexo = sexo
+        self.fecha_nacimiento = fecha_nacimiento
+        self.telefono = telefono
+        self.email = email
 
     def serialize(self):
         return {
             'id': self.id,
-            'nombre':self.nombre,
+            'nombre': self.nombre,
             'apellido': self.apellido,
             'rol': self.rol,
             'contrasena': self.contrasena,
@@ -59,6 +66,10 @@ class Usuario(db.Model):
             'telefono': self.telefono,
             'email': self.email
         }
+
+    def check_password(self, password):
+        return check_password_hash(self.contrasena, password)
+
 class Receta(db.Model):
     __tablename__ = 'receta'
 
@@ -147,7 +158,7 @@ class Cotizacion(db.Model):
             'control': self.control,
             'precio': self.precio,
             'total': self.total
-        }
+}
 
 class Delivery(db.Model):
     __tablename__ = 'delivery'
@@ -181,30 +192,12 @@ class Delivery(db.Model):
 
 # Endpoints
 @app.route('/', methods=['GET', 'POST'])
-def formulario_usuario():
-    if request.method == 'POST':
-        nombre = request.form['nombre']
-        apellido = request.form['apellido']
-        rol = request.form['rol']
-        contrasena = request.form['contrasena']
-        sexo = request.form['sexo']
-        fecha_nacimiento = request.form['fecha_nacimiento']
-        telefono = request.form['telefono']
-        email = request.form['email']
-
-        nuevo_usuario = Usuario(nombre=nombre, apellido=apellido, rol=rol, contrasena=contrasena, sexo=sexo,
-                                fecha_nacimiento=fecha_nacimiento, telefono=telefono, email=email)
-        db.session.add(nuevo_usuario)
-        db.session.commit()
-
-        # Redirigir al usuario 
-        return redirect('/recetas')
-
-    usuarios = Usuario.query.all()
-    return render_template('usuario.html', usuarios=usuarios)
+def index():
+    return render_template('index.html')
 
 
 @app.route('/recetas', methods=['GET', 'POST'])
+@login_required
 def crear_receta():
     if request.method == 'POST':
         medicamento = request.form['medicamento']
@@ -224,17 +217,43 @@ def crear_receta():
 
     return render_template('receta.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = Usuario.query.filter_by(email=email).first()
+        if user is None or not user.check_password(password):
+            flash('Credenciales inválidas. Por favor, intenta nuevamente.')
+            return redirect(url_for('login'))
 
+        login_user(user)
+        next_page = request.args.get('next')
+
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+
+        return redirect('/recetas')
+
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route('/hola', methods=['GET'])
+@login_required
 def index():
     usuarios=Usuario.query.all()
 
     return 'Hello World: {}'.format(', '.join([x.nombre for x in usuarios]))
 
 
-
 # Start the app
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.query.get(int(user_id))
 
 if __name__ == '__main__':
     with app.app_context():
