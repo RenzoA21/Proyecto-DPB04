@@ -182,28 +182,47 @@ class Delivery(db.Model):
 # Endpoints
 @app.route('/', methods=['GET', 'POST'])
 def formulario_usuario():
-
     if request.method == 'POST':
-        nombre= request.form['nombre']
-        apellido= request.form['apellido']
-        rol= request.form['rol']
-        contrasena= request.form['contrasena']
-        sexo= request.form['sexo']
-        fecha_nacimiento= request.form['fecha_nacimiento']
-        telefono= request.form['telefono']
-        email= request.form['email']
-
+        nombre = request.form['nombre']
+        apellido = request.form['apellido']
+        rol = request.form['rol']
+        contrasena = request.form['contrasena']
+        sexo = request.form['sexo']
+        fecha_nacimiento = request.form['fecha_nacimiento']
+        telefono = request.form['telefono']
+        email = request.form['email']
 
         nuevo_usuario = Usuario(nombre=nombre, apellido=apellido, rol=rol, contrasena=contrasena, sexo=sexo,
                                 fecha_nacimiento=fecha_nacimiento, telefono=telefono, email=email)
         db.session.add(nuevo_usuario)
         db.session.commit()
 
-        # Redirigir al usuario a otra página o mostrar un mensaje de éxito
-        return redirect('/hola')
+        # Redirigir al usuario nuevamente a la misma página
+        return redirect('/recetas')
 
     usuarios = Usuario.query.all()
     return render_template('usuario.html', usuarios=usuarios)
+
+
+@app.route('/recetas', methods=['GET', 'POST'])
+def crear_receta():
+    if request.method == 'POST':
+        medicamento = request.form['medicamento']
+        tipo_de_toma = request.form['tipo_de_toma']
+        cantidad = int(request.form['cantidad'])
+        unidad_medida = request.form['unidad_medida']
+        porcentaje = float(request.form['porcentaje'])
+        ml_g = float(request.form['ml_g'])
+
+        nueva_receta = Receta(medicamento=medicamento, tipo_de_toma=tipo_de_toma, cantidad=cantidad,
+                              unidad_medida=unidad_medida, porcentaje=porcentaje, ml_g=ml_g)
+        db.session.add(nueva_receta)
+        db.session.commit()
+
+        # Redirigir al usuario nuevamente a la misma página
+        return redirect('/recetas')
+
+    return render_template('receta.html')
 
 
 
