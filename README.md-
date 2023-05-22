@@ -12,17 +12,17 @@ Es una aplicacion web de una farmacia que busca administrar los negocios del loc
 
 ### Objetivos principales
 
--Poder tener un
--Crear un login para usuarios 
+-Poder tener un registro de los pedidos de manera digital y eficiente en donde tanto el usuario como la farmacia se beneficien.
+-Crear un login para usuarios para poder guardar un registro de los clientes y tener su datos para la facilidad de las transacciones que se van a realizar.
 
 
 #### Misión
 
--Generar dinero a traves de esta aplicacion de farmacia, por el medio del delivery, preparacion de recetas, consultas y compras a traves de esta
+-Generar dinero a traves de esta aplicacion de farmacia, por el medio del delivery, preparacion de recetasy compras a traves de la pagina web.
 
 #### Visión
 
-- Tener una aplicacion web en donde los usuarios puedan realizar operaciones con la farmacia
+- Tener una aplicacion web en donde los usuarios puedan realizar operaciones con la farmacia de manera eficiente.
 
 ###Información acerca de las librerías/frameworks/plugins utilizadas
 
