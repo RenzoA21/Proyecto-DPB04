@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delivery</title>
+    <!-- Reemplaza con los links a tus archivos CSS -->
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="title">Delivery</h2>
+        <form method="POST">
+                    <div class="form-group">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" id="direccion" name="direccion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehiculo">Vehículo</label>
+                        <input type="text" id="vehiculo" name="vehiculo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="placa">Placa</label>
+                        <input type="text" id="placa" name="placa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metodo_pago">Método de Pago</label>
+                        <input type="text" id="metodo_pago" name="metodo_pago" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hora_entrega">Hora de Entrega</label>
+                        <input type="datetime-local" id="hora_entrega" name="hora_entrega" required>
+                    </div>                    
+                    <div class="form-group">
+                        <input type="submit" value="Crear Delivery">
+                    </div>
+            </div>
+        </form>
+        <!-- Tabla para mostrar los deliveries existentes -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Dirección</th>
+                    <th>Vehículo</th>
+                    <th>Placa</th>
+                    <th>Método de Pago</th>
+                    <th>Hora de Entrega</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for delivery in deliveries %}
+                <tr>
+                    <td>{{ delivery.direccion }}</td>
+                    <td>{{ delivery.vehiculo }}</td>
+                    <td>{{ delivery.placa }}</td>
+                    <td>{{ delivery.metodo_pago }}</td>
+                    <td>{{ delivery.hora_entrega }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

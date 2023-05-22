@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      width: 400px;
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0px 14px 28px rgba(0,0,0,0.25), 0px 10px 10px rgba(0,0,0,0.22);
+      animation: fadeIn ease 2s;
+      -webkit-animation: fadeIn ease 2s;
+      -moz-animation: fadeIn ease 2s;
+      -o-animation: fadeIn ease 2s;
+      -ms-animation: fadeIn ease 2s;
+    }
+
+    .card-body {
+      padding: 2em;
+    }
+
+    .form-control {
+      border-radius: 50px;
+    }
+
+    .btn {
+      border-radius: 50px;
+    }
+
+    @keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-moz-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-webkit-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-o-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-ms-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+  </style>
+
+  <title>Registro de usuario</title>
+</head>
+
+<body>
+  <div class="card">
+    <div class="card-body">
+      <h1 class="card-title text-center mb-5">Regístrate</h1>
+      <form action="/registro" method="POST">
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input type="text" class="form-control" id="nombre" name="nombre" required>
+        </div>
+
+        <div class="form-group">
+          <label for="apellido">Apellido:</label>
+          <input type="text" class="form-control" id="apellido" name="apellido" required>
+        </div>
+
+        <div class="form-group">
+          <label for="rol">Rol:</label>
+          <input type="text" class="form-control" id="rol" name="rol" required>
+        </div>
+
+        <div class="form-group">
+          <label for="contrasena">Contraseña:</label>
+          <input type="password" class="form-control" id="contrasena" name="contrasena" required>
+        </div>
+
+        <div class="form-group">
+          <label for="sexo">Sexo:</label>
+          <select class="form-control" id="sexo" name="sexo" required>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+          <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono:</label>
+          <input type="tel" class="form-control" id="telefono" name="telefono" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+
