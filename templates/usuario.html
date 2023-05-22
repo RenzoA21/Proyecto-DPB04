@@ -1,4 +1,100 @@
+<!DOCTYPE html>
 <html>
+<head>
+    <title>Formulario de usuario</title>
+    <style>
+        :root {
+            --background: rgba(0, 128, 128, 0.85);
+        }
+
+        /* Agrega el resto del código CSS aquí */
+        body {
+            background: var(--background);
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav {
+            background: #555;
+            color: #fff;
+            padding: 10px;
+        }
+
+        .navbar {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar li {
+            margin: 0 10px;
+        }
+
+        .navbar li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            width: 400px;
+            margin: 0 auto;
+            margin-top: 50px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="password"],
+        .form-container select,
+        .form-container input[type="date"],
+        .form-container input[type="tel"],
+        .form-container input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .form-container input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #555;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+    <script src="/static/js/usuario.js"></script>
+</head>
+<body>
     <header>
         <h1>Usuario</h1>
     </header>
@@ -12,12 +108,7 @@
             <li><a href="delivery.html">Delivery</a></li>
         </ul>
     </nav>
-    <head>
-        <title>Formulario de usuario</title>
-        <link rel="stylesheet" href="/static/css/usuario.css" />
-        <script src="/static/js/usuario.js"></script>
-      </head>
-<body>
+
     <div class="form-container">
         <h1>Formulario de Usuario</h1>
         <form action="/" method="POST">
